@@ -1,35 +1,25 @@
-# Airbnb Database Schema – ALX Project
+# Database Schema – Airbnb Project
 
 ## Overview
 
-This project is part of the **ALX Airbnb Database Module**, designed to simulate a production-level database system for an Airbnb-like platform. It includes:
+This file defines the structure of the Airbnb-like relational database using SQL DDL (Data Definition Language). It includes tables, primary keys, foreign keys, constraints, and indexes to ensure data integrity and performance.
 
-- Schema creation (`schema.sql`)
-- Sample data population (`seed.sql`)
-- Entity-Relationship design (see ERD folder)
-- Normalization documentation up to 3NF
+## Features
 
----
+- Uses UUID as the primary key for all entities.
+- Defines 6 main entities: Users, Properties, Bookings, Payments, Reviews, and Messages.
+- Establishes all necessary foreign key relationships.
+- Includes proper constraints (NOT NULL, CHECK, UNIQUE, etc.).
+- Uses indexes on key fields for efficient querying.
 
-## Entities
+## Tables Defined
 
-1. **Users**: Hosts, guests, and admins.
-2. **Properties**: Listings created by hosts.
-3. **Bookings**: Reservation records for properties.
-4. **Payments**: Payment details linked to bookings.
-5. **Reviews**: Feedback left by users for properties.
-6. **Messages**: Internal communication between users.
-
----
-
-## Files
-
-| File        | Description                                |
-|-------------|--------------------------------------------|
-| `schema.sql`| SQL DDL for all tables and constraints     |
-| `seed.sql`  | Sample data insertion for testing          |
-| `normalization.md` | Explains how 3NF was applied         |
-| `ERD/requirements.md` | Contains ER diagram instructions |
+- Users: Stores all platform users (guest, host, admin)
+- Properties: Listings created by hosts
+- Bookings: Reservations made by users
+- Payments: Payment information linked to bookings
+- Reviews: User reviews of properties
+- Messages: Messages exchanged between users
 
 ---
 
@@ -37,17 +27,26 @@ This project is part of the **ALX Airbnb Database Module**, designed to simulate
 
 ### Prerequisites
 
-- PostgreSQL 13+
-- `uuid-ossp` extension enabled
+- PostgreSQL (v13+ recommended)
+- uuid-ossp extension enabled
 
 ### To Run
 
 ```bash
 psql -U postgres -d airbnb_db -f schema.sql
-psql -U postgres -d airbnb_db -f seed.sql
 ```
+This will execute the SQL script and generate all tables with appropriate constraints.
 
-### Notes
-- All UUIDs are generated using uuid_generate_v4() from the uuid-ossp extension.
-- ENUMs are implemented via VARCHAR CHECK constraints for flexibility.
-- Data is realistic and reflects standard Airbnb-like operations.
+## Notes
+
+ENUMs are implemented as VARCHAR with CHECK constraints for extensibility.
+
+updated_at timestamps can be updated via application logic (e.g., triggers or on update hooks).
+
+---
+
+## Author
+
+**Oluwaseyi M. Oke**
+**Project:** DataScape - Mastering Database Design (ALX)
+**File:** schema.sql
