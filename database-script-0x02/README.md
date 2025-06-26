@@ -5,9 +5,11 @@
 This file contains SQL DML (Data Manipulation Language) statements to populate the Airbnb database with realistic sample data. It supports testing and demonstration of the schema.
 
 ## Features
-- Seeds sample users (guest, host, admin)
+- Seeds roles (guest, host, admin)
+- Seeds sample users
 - Adds one property listed by a host
 - Creates a booking by a guest
+- Seeds Available Payment Methods
 - Logs a payment for the booking
 - Adds a review for the property
 - Includes a user-to-user message
@@ -28,6 +30,11 @@ psql -U postgres -d airbnb_db -f seed.sql
 
 ## Data Sample
 
+- **Roles**
+  - Admin
+  - Host
+  - Guest
+
 - **Users:**
   - John (Host)
   - Jane (Guest)
@@ -38,6 +45,11 @@ psql -U postgres -d airbnb_db -f seed.sql
 
 - **Booking:**
   - From July 1 to July 5, 2025 (Total: $600)
+
+- **Payment_Methods**
+  - Paypal
+  - Stripe
+  - Apple
 
 - **Payment:**
   - Via PayPal
@@ -50,11 +62,5 @@ psql -U postgres -d airbnb_db -f seed.sql
 
 ## Notes
 
-- User IDs and Property IDs are selected via subqueries for referential integrity.
+- Role IDs, User IDs, Property IDs and Payment IDs are selected via subqueries for referential integrity.
 - Realistic data helps simulate production-like usage for development or demos.
-
-## Author
-
-**Marvellous Oke**
-**Project:** DataScape - Mastering Database Design (ALX)
-**File:** seed.sql

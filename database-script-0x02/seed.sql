@@ -1,4 +1,12 @@
 -- seed.sql
+-- Insert Roles
+INSERT INTO
+  Roles (name)
+VALUES
+  ('admin'),
+  ('host'),
+  ('guest');
+
 -- Insert Users
 INSERT INTO
   Users (
@@ -7,7 +15,7 @@ INSERT INTO
     email,
     password_hash,
     phone_number,
-    role
+    role_id
   )
 VALUES
   (
@@ -16,7 +24,14 @@ VALUES
     'john@example.com',
     'hashed_pw_1',
     '1234567890',
-    'host'
+    (
+      SELECT
+        role_id
+      FROM
+        Roles
+      WHERE
+        name = 'host'
+    )
   ),
   (
     'Jane',
@@ -24,7 +39,14 @@ VALUES
     'jane@example.com',
     'hashed_pw_2',
     '0987654321',
-    'guest'
+    (
+      SELECT
+        role_id
+      FROM
+        Roles
+      WHERE
+        name = 'guest'
+    )
   ),
   (
     'Admin',
@@ -32,7 +54,14 @@ VALUES
     'admin@example.com',
     'hashed_pw_3',
     NULL,
-    'admin'
+    (
+      SELECT
+        role_id
+      FROM
+        Roles
+      WHERE
+        name = 'admin'
+    )
   );
 
 -- Insert Properties
@@ -94,6 +123,14 @@ VALUES
     'confirmed'
   );
 
+-- Insert Payment Methods
+INSERT INTO
+  Payment_Methods (name)
+VALUES
+  ('paypal'),
+  ('stripe'),
+  ('apple');
+
 -- Insert Payments
 INSERT INTO
   Payments (booking_id, amount, payment_method)
@@ -108,7 +145,14 @@ VALUES
         1
     ),
     600.00,
-    'paypal'
+    (
+      SELECT
+        payment_method_id
+      FROM
+        Payment_Methods
+      WHERE
+        name = 'paypal'
+    )
   );
 
 -- Insert Reviews

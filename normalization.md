@@ -1,110 +1,94 @@
-# Database Normalization Report – AirBnB Schema
+# Database Normalization Report – Airbnb Schema
 
 ## Objective
 
-To apply normalization principles to the provided AirBnB schema and ensure it satisfies Third Normal Form (3NF). This report identifies any redundancies or violations and proposes adjustments if necessary.
+To apply normalization principles to the Airbnb database schema to eliminate redundancy, ensure data consistency, and verify that the schema satisfies **Third Normal Form (3NF)**. This report explains the normalization process step-by-step.
 
 ---
 
-## ✅ First Normal Form (1NF)
+## Step 1: First Normal Form (1NF)
 
-**Requirement:**  
-- Each column contains only atomic (indivisible) values.  
-- Each record is unique with a defined primary key.
+### ✅ What is 1NF?
+A table is in First Normal Form if:
+- Each column contains atomic (indivisible) values.
+- Each row is uniquely identifiable by a primary key.
+- No repeating groups or arrays are allowed.
 
-**Assessment:**  
-All tables meet 1NF:
-- Attributes are atomic (e.g., no arrays or lists).
-- Each table has a primary key using UUIDs.
-- No repeating groups or multi-valued fields.
+### 🛠 Application to Schema
+- All tables use **UUID-based primary keys** for uniqueness (`user_id`, `property_id`, etc.).
+- All attributes hold single values (e.g., `email`, `role_id`, `price_per_night`).
+- No multivalued fields or repeating groups exist.
 
----
-
-## ✅ Second Normal Form (2NF)
-
-**Requirement:**  
-- The table must be in 1NF.  
-- All non-key attributes must depend on the *entire* primary key (no partial dependency).
-
-**Assessment:**  
-All primary keys are single-column (UUID), so partial dependencies are not possible.
-
-All tables satisfy 2NF.
+✅ **Conclusion**: All tables meet 1NF.
 
 ---
 
-## ✅ Third Normal Form (3NF)
+## Step 2: Second Normal Form (2NF)
 
-**Requirement:**  
-- The table must be in 2NF.  
-- No transitive dependencies (i.e., non-key attributes should not depend on other non-key attributes).
+### ✅ What is 2NF?
+A table is in Second Normal Form if:
+- It is already in 1NF.
+- All non-key attributes are fully functionally dependent on the entire primary key.
 
-**Assessment Table-by-Table:**
+### 🛠 Application to Schema
+- All tables use **single-column primary keys**, so partial dependencies are not possible.
+- Every non-key column depends directly on the primary key (e.g., `email` on `user_id`, `price_per_night` on `property_id`).
 
-### User
-- All fields directly describe the user.
-- No transitive dependencies.
-- ✅ In 3NF.
-
-### Property
-- Attributes describe the property directly.
-- `host_id` is a foreign key to `User(user_id)`.
-- ✅ In 3NF.
-
-### Booking
-- All fields depend solely on `booking_id`.
-- `property_id` and `user_id` are valid foreign keys.
-- ✅ In 3NF.
-
-### Payment
-- Attributes are fully dependent on `payment_id`.
-- `booking_id` is a foreign key.
-- `amount`, `payment_date`, `payment_method` are directly related to the payment.
-- ✅ In 3NF.
-
-### Review
-- Each review relates to a property and a user.
-- `rating` and `comment` are dependent on `review_id`.
-- ✅ In 3NF.
-
-### Message
-- `sender_id` and `recipient_id` are foreign keys.
-- `message_body` and `sent_at` are attributes directly related to `message_id`.
-- ✅ In 3NF.
+✅ **Conclusion**: All tables meet 2NF.
 
 ---
 
-## Optional Improvements (Beyond 3NF)
+## Step 3: Third Normal Form (3NF)
 
-While the schema satisfies 3NF, the following improvements are suggested for better scalability:
+### ✅ What is 3NF?
+A table is in Third Normal Form if:
+- It is already in 2NF.
+- There are no **transitive dependencies**—i.e., non-key attributes do not depend on other non-key attributes.
 
-### 1. Normalize ENUM values into separate tables
+### 🛠 Application to Schema (Table-by-Table)
 
-**a. `User.role` ENUM (guest, host, admin)**
+#### ✅ `Roles`
+- Contains `role_id` and `role_name`.
+- No derived or dependent attributes — already in 3NF.
 
-Create a new `Role` table:
-```sql
-CREATE TABLE Role (
-  role_id UUID PRIMARY KEY,
-  role_name VARCHAR UNIQUE NOT NULL
-);
-```
+#### ✅ `Users`
+- Attributes like `first_name`, `email` describe the user.
+- Linked to a role via foreign key `role_id`.
+- No attribute depends on another non-key attribute.
 
-**b. `Payment.payment_method` ENUM (credit_card, paypal, stripe)**
+#### ✅ `Properties`
+- Linked to a user via foreign key `host_id`.
+- All other attributes (e.g., `location`, `description`) relate directly to the property.
 
-Create a new `PaymentMethod` table:
-```sql
-CREATE TABLE PaymentMethod (
-  payment_method_id UUID PRIMARY KEY,
-  method_name VARCHAR UNIQUE NOT NULL
-);
-```
+#### ✅ `Bookings`
+- Linked to a user via foreign key `user_id` and property via foreign key `property_id`.
+- All other attributes (`start_date`, `total_price`, `status`) relate directly to the booking.
 
-This allows easier updates, better data management, and potential localization or metadata for roles and payment methods.
+#### ✅ `PaymentMethods`
+- Contains `payment_method_id` and `name`.
+- Already normalized.
+
+#### ✅ `Payments`
+- Linked to a booking via foreign key `booking_id` and a payment method via foreign key `payment_method_id`.
+- No transitive dependencies — all attributes directly relate to the payment.
+
+#### ✅ `Reviews`
+- Linked to a property via foreign key `property_id` and a user via foreign key `user_id`.
+- Attributes like `rating`, `comment`, `created_at` are directly about the review.
+
+#### ✅ `Messages`
+- Linked to user via foreign keys (`sender_id` and `recipient_id`).
+- Message body and timestamp are only about the message itself.
+
+✅ **Conclusion**: All tables meet 3NF.
 
 ---
 
-## Conclusion
+## Final Verdict
 
-✅ The AirBnB schema is fully normalized to 3NF.  
-No modifications are required to meet 3NF, but normalization of ENUMs into separate tables is recommended for extensibility and maintainability.
+🎉 The Airbnb schema is **fully normalized up to Third Normal Form (3NF)**.  
+- No partial dependencies (2NF satisfied).  
+- No transitive dependencies (3NF satisfied).  
+- Repeating groups and multi-valued fields have been eliminated (1NF satisfied).
+
+The design supports scalability, data consistency, and maintainability — a solid foundation for a production-grade relational database.
