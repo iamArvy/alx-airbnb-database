@@ -1,3 +1,4 @@
+-- This query retrieves booking details along with user information by joining the Bookings and Users tables.
 SELECT
   Bookings.id AS booking_id,
   Bookings.date,
@@ -8,7 +9,7 @@ FROM
   Bookings
   INNER JOIN Users ON Bookings.user_id = Users.id;
 
--- This query retrieves booking details along with user information by joining the Bookings and Users tables.
+-- This query retrieves all properties and their associated reviews, including properties that have no reviews.
 SELECT
   Properties.id AS property_id,
   Properties.name,
@@ -17,10 +18,11 @@ SELECT
   Reviews.comment
 FROM
   Properties
-  LEFT JOIN Reviews ON Properties.id = Reviews.property_id;
+  LEFT JOIN Reviews ON Properties.id = Reviews.property_id
+ORDER BY
+  Properties.id;
 
--- This query retrieves all properties and their associated reviews, including properties that have no reviews.
-
+-- This query retrieves all users and their bookings, including users with no bookings and bookings with no associated users.
 SELECT
   Users.id AS user_id,
   Users.name,
@@ -29,5 +31,3 @@ SELECT
 FROM
   Users
   FULL OUTER JOIN Bookings ON Users.id = Bookings.user_id;
-
--- This query retrieves all users and their bookings, including users with no bookings and bookings with no associated users.
