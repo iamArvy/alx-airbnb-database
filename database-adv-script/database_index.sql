@@ -1,4 +1,4 @@
-EXPLAIN
+EXPLAIN ANALYZE
 SELECT
   *
 FROM
@@ -23,7 +23,7 @@ CREATE INDEX idx_properties_location ON Properties (location);
 
 CREATE INDEX idx_properties_name ON Properties (name);
 
-EXPLAIN
+EXPLAIN ANALYZE
 SELECT
   *
 FROM
