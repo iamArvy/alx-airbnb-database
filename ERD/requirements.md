@@ -102,7 +102,7 @@
 | `Properties` → `Users`           | Many-to-One               | Each property belongs to one host (user).                    |
 | `Bookings` → `Users`             | Many-to-One               | Each booking is made by a user (guest).                      |
 | `Bookings` → `Properties`        | Many-to-One               | Each booking is for a specific property.                     |
-| `Payments` → `Bookings`          | Many-to-One               | Each payment is tied to a booking.                           |
+| `Payments` → `Bookings`          | One-to-One                | Each payment is tied to a booking.                           |
 | `Payments` → `PaymentMethods`    | Many-to-One               | Each payment uses a payment method.                          |
 | `Reviews` → `Properties`         | Many-to-One               | Each review is written for a property.                       |
 | `Reviews` → `Users`              | Many-to-One               | Each review is written by a user.                            |
